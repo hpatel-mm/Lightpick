@@ -335,7 +335,7 @@
     renderYearHeading = function(date, opts)
     {
         var d = moment(date),
-        heading = document.createElement('span');
+            heading = document.createElement('span'),
             minYear = 1900,
             maxYear = Number.parseInt(moment().format('YYYY'));
 
