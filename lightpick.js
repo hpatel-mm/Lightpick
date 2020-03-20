@@ -127,7 +127,7 @@
 
     renderDay = function(opts, date, dummy, extraClass)
     {
-        if (dummy) return '<div></div>';
+        if (dummy) return '<div class="lightpick__day is-dummy"></div>';
 
         var date = moment(date),
             prevMonth = moment(date).subtract(1, 'month'),
