@@ -282,7 +282,7 @@
 
     renderMonthHeading = function(date, opts)
     {
-        var d = moment(date)
+        var d = moment(date),
             heading = document.createElement('span');
 
         for (var idx = 0; idx < 12; idx++) {
