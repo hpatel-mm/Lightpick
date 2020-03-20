@@ -476,7 +476,7 @@
 
     updateDates = function(el, opts)
     {
-        var days = el.querySelectorAll('.lightpick__day');
+        var days = el.querySelectorAll('.lightpick__day:not(.is-dummy)');
         [].forEach.call(days, function(day) {
             day.outerHTML = renderDay(opts, parseInt(day.getAttribute('data-time')), false, day.className.split(' '));
         });
@@ -488,7 +488,7 @@
     {
         if (opts.disabledDatesInRange || !opts.startDate || opts.endDate || !opts.disableDates) return;
 
-        var days = el.querySelectorAll('.lightpick__day'),
+        var days = el.querySelectorAll('.lightpick__day:not(.is-dummy)'),
             disabledArray = opts.disableDates.map(function(entry){
                 return entry instanceof Array || Object.prototype.toString.call(entry) === '[object Array]' ? entry[0] : entry;
             }),
@@ -745,7 +745,7 @@
 
                 var startDate = (opts.startDate && !opts.endDate) || (opts.repick && opts.repickTrigger === opts.secondField) ? opts.startDate : opts.endDate;
 
-                var days = self.el.querySelectorAll('.lightpick__day');
+                var days = self.el.querySelectorAll('.lightpick__day:not(.is-dummy)');
                 [].forEach.call(days, function(day) {
                     var dt = moment(parseInt(day.getAttribute('data-time')));
 
