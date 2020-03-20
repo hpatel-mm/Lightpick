@@ -98,10 +98,24 @@
 
     renderTopButtons = function(opts)
     {
+        var disablePrevious = false;
+        var disableNext = false;
+
+        var prevCalendar = opts.calendar[0] || null;
+        var nextCalendar = opts.calendar[1] || null;
+
+        if (opts.minDate && prevCalendar && prevCalendar.isBefore(opts.minDate, 'day')) {
+            disablePrevious = true;
+        }
+
+        if (opts.maxDate && nextCalendar && nextCalendar.isAfter(opts.maxDate, 'day')) {
+            disableNext = true;
+        }
+
         return '<div class="lightpick__toolbar">'
             + ''
-            + '<button type="button" class="lightpick__previous-action">' + opts.locale.buttons.prev + '</button>'
-            + '<button type="button" class="lightpick__next-action">' + opts.locale.buttons.next + '</button>'
+            + '<button type="button" class="lightpick__previous-action" ' + (disablePrevious ? 'disabled' : '') + '>' + opts.locale.buttons.prev + '</button>'
+            + '<button type="button" class="lightpick__next-action" ' + (disableNext ? 'disabled' : '') + '>' + opts.locale.buttons.next + '</button>'
             + (!opts.autoclose && !opts.inline ? '<button type="button" class="lightpick__close-action">' + opts.locale.buttons.close + '</button>'  : '')
             + '</div>';
     },
@@ -266,6 +280,27 @@
         return div.outerHTML;
     },
 
+    renderMonthHeading = function(date, opts)
+    {
+        var d = moment(date)
+            heading = document.createElement('span');
+
+        for (var idx = 0; idx < 12; idx++) {
+            d.set('month', idx);
+
+            if (idx !== date.toDate().getMonth()) {
+                continue;
+            }
+
+
+            heading.textContent = d.toDate().toLocaleString(opts.lang, { month: 'long' });
+        }
+
+        heading.className = 'lightpick__month-title__month';
+
+        return heading.outerHTML;
+    },
+
     renderMonthsList = function(date, opts)
     {
         var d = moment(date),
@@ -295,6 +330,36 @@
         }
 
         return select.outerHTML;
+    },
+
+    renderYearHeading = function(date, opts)
+    {
+        var d = moment(date),
+        heading = document.createElement('span');
+            minYear = 1900,
+            maxYear = Number.parseInt(moment().format('YYYY'));
+
+        if (Number.parseInt(date.format('YYYY')) < minYear) {
+            minYear = Number.parseInt(date.format('YYYY'));
+        }
+
+        if (Number.parseInt(date.format('YYYY')) > maxYear) {
+            maxYear = Number.parseInt(date.format('YYYY'));
+        }
+
+        for (var idx = minYear; idx <= maxYear; idx++) {
+            d.set('year', idx);
+
+            if (idx !== date.toDate().getFullYear()) {
+                continue;
+            }
+
+            heading.textContent = d.toDate().getFullYear();
+        }
+
+        heading.className = 'lightpick__month-title__year';
+
+        return heading.outerHTML;
     },
 
     renderYearsList = function(date, opts)
@@ -347,8 +412,8 @@
             html += '<section class="lightpick__month">';
             html += '<header class="lightpick__month-title-bar">'
             html += '<div class="lightpick__month-title">'
-            + renderMonthsList(day, opts)
-            + renderYearsList(day, opts)
+            + opts.dropdowns ? renderMonthsList(day, opts) : renderMonthHeading(day, opts)
+            + opts.dropdowns ? renderYearsList(day, opts) : renderYearHeading(day, opts)
             + '</div>';
 
             if (opts.numberOfMonths === 1) {
