@@ -101,8 +101,8 @@
         var disablePrevious = false;
         var disableNext = false;
 
-        var prevCalendar = opts.calendar[0] || null;
-        var nextCalendar = opts.calendar[1] || null;
+        var prevCalendar = moment(opts.calendar[0]).subtract(opts.numberOfMonths, 'month') || null;
+        var nextCalendar = moment(opts.calendar[1]) || null;
 
         if (opts.minDate && prevCalendar && prevCalendar.isBefore(opts.minDate, 'day')) {
             disablePrevious = true;
@@ -412,8 +412,8 @@
             html += '<section class="lightpick__month">';
             html += '<header class="lightpick__month-title-bar">'
             html += '<div class="lightpick__month-title">'
-            + opts.dropdowns ? renderMonthsList(day, opts) : renderMonthHeading(day, opts)
-            + opts.dropdowns ? renderYearsList(day, opts) : renderYearHeading(day, opts)
+            + (opts.dropdowns ? renderMonthsList(day, opts) : renderMonthHeading(day, opts))
+            + (opts.dropdowns ? renderYearsList(day, opts) : renderYearHeading(day, opts))
             + '</div>';
 
             if (opts.numberOfMonths === 1) {
